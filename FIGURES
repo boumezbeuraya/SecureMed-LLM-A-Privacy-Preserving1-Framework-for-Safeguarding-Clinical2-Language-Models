@@ -1,0 +1,54 @@
+          ┌──────────────────────────────────────────────┐
+          │               INPUT (Raw Data)                │
+          │     Chest X-ray + Optional Patient Text       │
+          └──────────────────────────────────────────────┘
+                                │
+                                ▼
+      ┌─────────────────────────────────────────────────────────┐
+      │  LEVEL 1 — PHI ANONYMIZATION                           │
+      │  • Removes identifiers from text (Presidio + Med-Guard)│
+      │  • Removes patient metadata from image DICOM/PNG       │
+      └─────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+      ┌─────────────────────────────────────────────────────────┐
+      │  LEVEL 2 — SECURE TRANSMISSION (TLS 1.3)                │
+      │  • Data encrypted in transit                            │
+      │  • Prevents interception / eavesdropping               │
+      └─────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+      ┌─────────────────────────────────────────────────────────┐
+      │  LEVEL 3 — LLM PROCESSING                              │
+      │  • Robust LLM generates Findings + Impression           │
+      │  • Protected with DP-SGD + adversarial fine-tuning      │
+      └─────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+      ┌─────────────────────────────────────────────────────────┐
+      │  LEVEL 4 — IDS-LLM VALIDATION                           │
+      │  • Rule-based checking                                  │
+      │  • Clinical parameter validation                        │
+      │  • Anomaly detection                                    │
+      │  → Rejects unsafe/incorrect outputs                     │
+      └─────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+      ┌─────────────────────────────────────────────────────────┐
+      │  LEVEL 5 — ECIES ENCRYPTION                             │
+      │  • Encrypt final report                                 │
+      │  • Ensures confidentiality & tamper resistance          │
+      └─────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+      ┌─────────────────────────────────────────────────────────┐
+      │  LEVEL 6 — SECURE DELIVERY                              │
+      │  • Only authorized clinician can decrypt                │
+      │  • Secure output channel (TLS / secure API)            │
+      └─────────────────────────────────────────────────────────┘
+                                │
+                                ▼
+          ┌──────────────────────────────────────────────┐
+          │                FINAL OUTPUT                   │
+          │      Encrypted & validated clinical report    │
+          └──────────────────────────────────────────────┘
