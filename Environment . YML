@@ -1,0 +1,38 @@
+name: securemed-llm
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pytorch>=1.13.0
+  - torchvision>=0.14.0
+  - cudatoolkit=11.7
+  - pip:
+    - transformers>=4.30.0
+    - tokenizers>=0.13.0
+    - opacus>=1.4.0
+    - open-clip-torch>=2.20.0
+    - Pillow>=9.0.0
+    - opencv-python>=4.7.0.72
+    - scikit-image>=0.20.0
+    - sentence-transformers>=2.2.2
+    - presidio-analyzer>=2.2.33
+    - presidio-anonymizer>=2.2.33
+    - spacy>=3.5.0
+    - torchattacks>=3.4.0
+    - scikit-learn>=1.2.0
+    - cryptography>=40.0.0
+    - PyNaCl>=1.5.0
+    - numpy>=1.23.0
+    - pandas>=1.5.0
+    - PyYAML>=6.0
+    - datasets>=2.12.0
+    - tqdm>=4.65.0
+    - nltk>=3.8.0
+    - sacrebleu>=2.3.1
+    - matplotlib>=3.7.0
+    - tensorboard>=2.12.0
+    - omegaconf>=2.3.0
+    - accelerate>=0.20.0
