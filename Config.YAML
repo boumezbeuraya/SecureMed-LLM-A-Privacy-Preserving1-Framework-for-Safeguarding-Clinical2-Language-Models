@@ -1,0 +1,91 @@
+model:
+  vision_encoder: "microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224"
+  text_decoder: "t5-base"
+  image_resolution: 224
+  max_seq_length: 128
+  projection_dim: 512          # linear projection output dim (into T5 d_model=512)
+
+training:
+  optimizer: "AdamW"
+  learning_rate: 2.0e-5
+  batch_size: 16
+  epochs: 5
+  gradient_clip_norm: 1.0
+  weight_decay: 0.01
+  warmup_steps: 500
+  save_every_n_epochs: 1
+  seed: 42
+
+differential_privacy:
+  enabled: true
+  epsilon: 3.0
+  delta: 1.0e-5
+  noise_multiplier: 1.1
+  max_grad_norm: 1.0           # DP clipping norm C
+  accountant: "rdp"            # Rényi DP accountant
+
+anonymization:
+  gaussian_sigma: 15           # Med-Guard image noise std dev
+  phi_entities:                # Presidio entity types to redact
+    - PERSON
+    - DATE_TIME
+    - LOCATION
+    - MEDICAL_LICENSE
+    - PHONE_NUMBER
+    - EMAIL_ADDRESS
+    - US_SSN
+    - IP_ADDRESS
+  text_placeholder: "[REDACTED]"
+
+adversarial:
+  enabled: true
+  injection_ratio: 0.05        # 5% adversarial samples per batch
+  attack_types:
+    - fgsm
+    - pgd
+    - deepfool
+  epsilon: 0.1                 # L-inf perturbation budget
+  pgd_steps: 10
+  pgd_alpha: 0.01              # PGD step size
+  deepfool_steps: 50
+  deepfool_overshoot: 0.02
+  attacker_model: "microsoft/phi-2"
+  attacker_epochs: 3
+  attacker_batch_size: 8
+  attacker_max_seq_length: 512
+
+ids_llm:
+  rules_file: "src/validation/rules.json"
+  anomaly_contamination: 0.1
+  embedding_model: "all-MiniLM-L6-v2"
+  anomaly_threshold: 0.1
+  regeneration_max_attempts: 3
+
+encryption:
+  curve: "curve25519"
+  scheme: "ecies"
+  keys_dir: "keys/"
+
+data:
+  dataset_path: "data/open-i/"
+  train_split: "train"
+  val_split: "val"
+  test_split: "test"
+  image_dir: "images"
+  report_dir: "reports"
+
+paths:
+  checkpoints_dir: "checkpoints/"
+  outputs_dir: "outputs/"
+  logs_dir: "logs/"
+
+evaluation:
+  metrics:
+    - bleu
+    - bleu4
+    - ssim
+    - psnr
+    - mia
+    - phi_leakage
+  mia_member_size: 500
+  mia_nonmember_size: 500
